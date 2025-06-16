@@ -2,7 +2,6 @@
 
 import { useState, useRef, KeyboardEvent } from 'react';
 import { getVocabularyData, getVocabularyByCategory } from './utils/vocabulary';
-import Link from 'next/link';
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showTranslation, setShowTranslation] = useState<number | null>(null);
