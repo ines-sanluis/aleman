@@ -1,0 +1,157 @@
+{
+  "words": [
+    {
+      "id": 1,
+      "german": "Hallo",
+      "english": "Hello",
+      "example": "Hallo, wie geht's?",
+      "exampleTranslation": "Hello, how are you?",
+      "level": "A1",
+      "category": "greetings"
+    },
+    {
+      "id": 2,
+      "german": "Danke",
+      "english": "Thanks",
+      "example": "Danke schön!",
+      "exampleTranslation": "Thank you very much!",
+      "level": "A1",
+      "category": "common words"
+    },
+    {
+      "id": 3,
+      "german": "Bitte",
+      "english": "Please",
+      "example": "Bitte schön!",
+      "exampleTranslation": "You're welcome!",
+      "level": "A1",
+      "category": "common words"
+    },
+    {
+      "id": 4,
+      "german": "Ja",
+      "english": "Yes",
+      "example": "Ja, das stimmt.",
+      "exampleTranslation": "Yes, that's correct.",
+      "level": "A1",
+      "category": "common words"
+    },
+    {
+      "id": 5,
+      "german": "Nein",
+      "english": "No",
+      "example": "Nein, das ist falsch.",
+      "exampleTranslation": "No, that is wrong.",
+      "level": "A1",
+      "category": "common words"
+    },
+    {
+      "id": 7,
+      "german": "Wer",
+      "english": "Who",
+      "example": "Wer ist das?",
+      "exampleTranslation": "Who is that?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 8,
+      "german": "Was",
+      "english": "What",
+      "example": "Was ist das?",
+      "exampleTranslation": "What is that?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 9,
+      "german": "Wo",
+      "english": "Where",
+      "example": "Wo bist du?",
+      "exampleTranslation": "Where are you?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 10,
+      "german": "Wie",
+      "english": "How",
+      "example": "Wie geht's?",
+      "exampleTranslation": "How are you?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 11,
+      "german": "Wohin",
+      "english": "Where to",
+      "example": "Wohin gehst du?",
+      "exampleTranslation": "Where are you going?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 12,
+      "german": "Wie",
+      "english": "How",
+      "example": "Wie alt bist du?",
+      "exampleTranslation": "How old are you?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 13,
+      "german": "Woher",
+      "english": "From where",
+      "example": "Woher kommst du?",
+      "exampleTranslation": "Where are you from?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 14,
+      "german": "Wann",
+      "english": "When",
+      "example": "Wann treffen wir uns?",
+      "exampleTranslation": "When do we meet?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 15,
+      "german": "Warum",
+      "english": "Why",
+      "example": "Warum lernst du Deutsch?",
+      "exampleTranslation": "Why are you learning German?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 16,
+      "german": "Wie viele",
+      "english": "How many",
+      "example": "Wie viele Katzen hast du?",
+      "exampleTranslation": "How many cats do you have?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 17,
+      "german": "Wie viel",
+      "english": "How much",
+      "example": "Wie viel kostet das?",
+      "exampleTranslation": "How much does it cost?",
+      "level": "A1",
+      "category": "questions"
+    },
+    {
+      "id": 18,
+      "german": "Welche",
+      "english": "Which",
+      "example": "Welche Farbe hast du?",
+      "exampleTranslation": "Which color do you have?",
+      "level": "A1",
+      "category": "questions"
+    }
+  ]
+}
