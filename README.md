@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# German Learning App
+
+A Next.js application for learning German vocabulary using AI-powered word enrichment and spaced repetition (Anki-style).
+
+## Features
+
+- **AI-Powered Word Enrichment**: Paste German words and ChatGPT automatically adds:
+  - Word type (noun, verb, adjective, etc.)
+  - Gender and plural forms (for nouns)
+  - Spanish translations
+  - Example sentences in German and Spanish
+  - Present tense and past tense conjugations (for verbs)
+  - Conjugation links to external resources
+  - Smart article handling (prevents duplication)
+
+- **Spaced Repetition System (SRS)**: Based on the SM-2 algorithm (like Anki)
+  - Only review words that are due today
+  - Rate cards: Again, Hard, Good, Easy
+  - Automatic scheduling based on your performance
+
+- **Card Management**:
+  - Edit any card field after creation
+  - Delete unwanted cards
+  - Search by German or Spanish words
+  - View detailed statistics for each card
+
+- **Mobile-Responsive Design**: Works seamlessly on desktop and mobile browsers
+
+- **Dark Mode Support**: Fully accessible dark theme with proper contrast
+
+- **File-Based Storage**: Cards saved to `data/cards.json`
+  - Access your cards across any platform with access to the project
+  - Commit to git for version control and backup
+  - No database required
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ installed
+- OpenAI API key ([get one here](https://platform.openai.com/api-keys))
+
+### Installation
+
+1. Navigate to the project directory:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd german-learning-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file and add your OpenAI API key:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Then edit `.env.local` and add your API key:
+```
+OPENAI_API_KEY=your_actual_api_key_here
+```
 
-## Learn More
+4. Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How to Use
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Add Words
+- Click "Add" in the navigation
+- Paste German words (one per line or comma-separated)
+- Click "Enrich Words with AI"
+- Review the enriched data and click "Save All Cards"
 
-## Deploy on Vercel
+### 2. Daily Review
+- The home page shows how many cards are due today
+- Click "Start Review Session"
+- See the German word and try to recall the meaning
+- Click "Show Answer" to reveal the translation and example
+- Rate yourself: Again, Hard, Good, or Easy
+- The app automatically schedules the next review
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. Library
+- View all your cards
+- Search by German or Spanish words
+- **Edit any card** by clicking the blue edit icon
+- See review statistics (interval, ease factor, next review date)
+- Delete cards or export/import your collection
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 4. Editing Cards
+- Click the blue edit icon next to any card in the Library
+- Modify any field: word, translation, examples, conjugations, etc.
+- Changes are saved to `data/cards.json` immediately
+- SRS scheduling data is preserved when editing
+
+## Tech Stack
+
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS (with dark mode support)
+- **AI**: OpenAI GPT-4o-mini
+- **Storage**: File system (`data/cards.json`)
+- **Algorithm**: SM-2 (SuperMemo 2) spaced repetition
+
+## Data Storage & Sync
+
+Your cards are stored in `data/cards.json` in the project directory. This means:
+
+- **Cross-Platform Access**: Any platform with access to the project files can access your cards
+- **Git Integration**: Commit `data/cards.json` to git for version control and backup
+- **Easy Backup**: The file is human-readable JSON that you can backup anywhere
+- **No Database Required**: Simple file-based storage, no setup needed
+
+### Export/Import
+
+You can still use the export/import feature for quick backups:
+
+1. Go to Library
+2. Click "Export" to download a backup JSON file
+3. Click "Import" to restore or merge cards from a backup file
+
+## Future Enhancements
+
+Consider adding:
+- Database support (Supabase, PlanetScale) for real-time multi-device sync
+- Audio pronunciation
+- More quiz modes (multiple choice, typing)
+- Learning statistics and progress charts
+- Deck/tag organization
+- Image support for vocabulary
+
+## License
+
+MIT
