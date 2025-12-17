@@ -68,16 +68,13 @@
   {
     "id": "d41dffbc-e3c8-4a52-b5c9-654f7f2c1c02",
     "wordData": {
-      "german": "Bücher",
-      "spanish": "libros",
+      "german": "Buch",
+      "spanish": "libro",
       "wordType": "noun",
-      "gender": "die",
-      "plural": "Bücher",
+      "gender": "das",
+      "plural": "die Bücher",
       "exampleGerman": "Ich lese nur Bücher.",
-      "exampleSpanish": "Solo leo libros.",
-      "conjugations": null,
-      "conjugationLink": null,
-      "pastTense": null
+      "exampleSpanish": "Solo leo libros."
     },
     "easeFactor": 2.5,
     "interval": 0,
@@ -774,28 +771,6 @@
     "createdAt": "2025-12-17T20:29:14.169Z"
   },
   {
-    "id": "a9f6c87f-1466-4d4e-8238-016d5d90d194",
-    "wordData": {
-      "german": "als",
-      "spanish": "cuando",
-      "wordType": "other",
-      "gender": null,
-      "plural": null,
-      "exampleGerman": "Als ich hierher umgezogen bin, war es aufregend.",
-      "exampleSpanish": "Cuando me mudé aquí, fue emocionante.",
-      "conjugations": null,
-      "conjugationLink": null,
-      "pastTense": null
-    },
-    "easeFactor": 2.5,
-    "interval": 0,
-    "repetitions": 0,
-    "nextReviewDate": "2025-12-16T23:00:00.000Z",
-    "lastReviewDate": null,
-    "isNew": true,
-    "createdAt": "2025-12-17T20:29:14.169Z"
-  },
-  {
     "id": "cce4e7d9-b48f-4d54-98af-585b8e9dd887",
     "wordData": {
       "german": "überrascht",
@@ -1126,15 +1101,12 @@
     "id": "f3648ffa-7a25-4b5b-87c4-aadc9c5123ba",
     "wordData": {
       "german": "als",
-      "spanish": "como",
+      "spanish": "como, cuando",
       "wordType": "other",
       "gender": null,
       "plural": null,
-      "exampleGerman": "Er arbeitet als Lehrer.",
-      "exampleSpanish": "Él trabaja como profesor.",
-      "conjugations": null,
-      "conjugationLink": null,
-      "pastTense": null
+      "exampleGerman": "Er arbeitet als Lehrer. / Als ich hierher umgezogen bin, war es aufregend.",
+      "exampleSpanish": "Él trabaja como profesor. / Cuando me mudé aquí, fue emocionante."
     },
     "easeFactor": 2.5,
     "interval": 0,
@@ -1293,28 +1265,6 @@
       "plural": "die Möglichkeiten",
       "exampleGerman": "Das ist eine gute Möglichkeit.",
       "exampleSpanish": "Esa es una buena posibilidad.",
-      "conjugations": null,
-      "conjugationLink": null,
-      "pastTense": null
-    },
-    "easeFactor": 2.5,
-    "interval": 0,
-    "repetitions": 0,
-    "nextReviewDate": "2025-12-16T23:00:00.000Z",
-    "lastReviewDate": null,
-    "isNew": true,
-    "createdAt": "2025-12-17T20:29:14.169Z"
-  },
-  {
-    "id": "03f0ac42-2b14-4c56-b90e-25d57fcde54c",
-    "wordData": {
-      "german": "Gegenden",
-      "spanish": "regiones",
-      "wordType": "noun",
-      "gender": "die",
-      "plural": "die Gegenden",
-      "exampleGerman": "Wir erkunden neue Gegenden.",
-      "exampleSpanish": "Exploramos nuevas regiones.",
       "conjugations": null,
       "conjugationLink": null,
       "pastTense": null
@@ -1522,35 +1472,6 @@
       ],
       "conjugationLink": "https://conjugator.reverso.net/conjugation-german-verb-beschaeftigen.html",
       "pastTense": "ich habe beschäftigt, du hast beschäftigt, er/sie/es hat beschäftigt"
-    },
-    "easeFactor": 2.5,
-    "interval": 0,
-    "repetitions": 0,
-    "nextReviewDate": "2025-12-16T23:00:00.000Z",
-    "lastReviewDate": null,
-    "isNew": true,
-    "createdAt": "2025-12-17T20:36:51.956Z"
-  },
-  {
-    "id": "fdfc6564-b3a5-4311-9006-4afbdeb5aec8",
-    "wordData": {
-      "german": "benutzen",
-      "spanish": "usar",
-      "wordType": "verb",
-      "gender": null,
-      "plural": null,
-      "exampleGerman": "Ich benutze mein Handy jeden Tag.",
-      "exampleSpanish": "Uso mi teléfono todos los días.",
-      "conjugations": [
-        "ich benutze",
-        "du benutzt",
-        "er/sie/es benutzt",
-        "wir benutzen",
-        "ihr benutzt",
-        "sie/Sie benutzen"
-      ],
-      "conjugationLink": "https://conjugator.reverso.net/conjugation-german-verb-benutzen.html",
-      "pastTense": "ich habe benutzt, du hast benutzt, er/sie/es hat benutzt"
     },
     "easeFactor": 2.5,
     "interval": 0,
@@ -2010,7 +1931,7 @@
   {
     "id": "e240e4b4-99f2-42a9-b166-216e0838e698",
     "wordData": {
-      "german": "angezünden",
+      "german": "anzünden",
       "spanish": "encender",
       "wordType": "verb",
       "gender": null,
@@ -2025,8 +1946,8 @@
         "ihr zündet an",
         "sie/Sie zünden an"
       ],
-      "conjugationLink": "https://conjugator.reverso.net/conjugation-german-verb-angezünden.html",
-      "pastTense": "ich habe angezündet, du hast angezündet, er/sie/es hat angezündet"
+      "pastTense": "ich habe angezündet, du hast angezündet, er/sie/es hat angezündet",
+      "conjugationLink": "https://conjugator.reverso.net/conjugation-german-verb-anzünden.html"
     },
     "easeFactor": 2.5,
     "interval": 0,
@@ -2763,25 +2684,6 @@
     "createdAt": "2025-12-17T20:41:32.499Z"
   },
   {
-    "id": "ddd856a6-1c16-4376-a39f-2330234ea382",
-    "wordData": {
-      "german": "Bekannte",
-      "spanish": "conocido",
-      "wordType": "noun",
-      "gender": "der",
-      "plural": "die Bekannten",
-      "exampleGerman": "Mein Bekannter ist sehr nett.",
-      "exampleSpanish": "Mi conocido es muy amable."
-    },
-    "easeFactor": 2.5,
-    "interval": 0,
-    "repetitions": 0,
-    "nextReviewDate": "2025-12-16T23:00:00.000Z",
-    "lastReviewDate": null,
-    "isNew": true,
-    "createdAt": "2025-12-17T20:41:32.499Z"
-  },
-  {
     "id": "d5b3362b-4966-418a-92b8-e57d8df8129e",
     "wordData": {
       "german": "Beste von zwei Welten",
@@ -3050,35 +2952,6 @@
     "createdAt": "2025-12-17T20:42:40.849Z"
   },
   {
-    "id": "b3313869-6554-4c54-b7ad-5c0698e919d4",
-    "wordData": {
-      "german": "mögen",
-      "spanish": "gustar",
-      "wordType": "verb",
-      "gender": null,
-      "plural": null,
-      "exampleGerman": "Ich mag Schokolade sehr.",
-      "exampleSpanish": "Me gusta mucho el chocolate.",
-      "conjugations": [
-        "ich mag",
-        "du magst",
-        "er/sie/es mag",
-        "wir mögen",
-        "ihr mögt",
-        "sie/Sie mögen"
-      ],
-      "conjugationLink": "https://conjugator.reverso.net/conjugation-german-verb-mogen.html",
-      "pastTense": "ich habe gemocht, du hast gemocht, er/sie/es hat gemocht"
-    },
-    "easeFactor": 2.5,
-    "interval": 0,
-    "repetitions": 0,
-    "nextReviewDate": "2025-12-16T23:00:00.000Z",
-    "lastReviewDate": null,
-    "isNew": true,
-    "createdAt": "2025-12-17T20:42:40.849Z"
-  },
-  {
     "id": "4f3df0b3-694e-48ff-aafe-90907545eef0",
     "wordData": {
       "german": "müssen",
@@ -3164,5 +3037,27 @@
     "lastReviewDate": null,
     "isNew": true,
     "createdAt": "2025-12-17T20:42:40.849Z"
+  },
+  {
+    "id": "9b7fc4d1-332a-4aeb-917e-e3c8573b73cb",
+    "wordData": {
+      "german": "sondern",
+      "spanish": "sino",
+      "wordType": "other",
+      "gender": null,
+      "plural": null,
+      "exampleGerman": "Ich mag keinen Kaffee, sondern Tee.",
+      "exampleSpanish": "No me gusta el café, sino el té.",
+      "conjugations": null,
+      "conjugationLink": null,
+      "pastTense": null
+    },
+    "easeFactor": 2.5,
+    "interval": 0,
+    "repetitions": 0,
+    "nextReviewDate": "2025-12-16T23:00:00.000Z",
+    "lastReviewDate": null,
+    "isNew": true,
+    "createdAt": "2025-12-17T20:49:29.413Z"
   }
 ]
