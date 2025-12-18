@@ -4,17 +4,39 @@ import { Card } from '@/types/word';
 
 const CARDS_KEY = 'german-learning-cards';
 
+// Check if Redis is configured
+function isRedisConfigured(): boolean {
+  return !!(
+    process.env.KV_REST_API_URL ||
+    process.env.KV_URL ||
+    process.env.REDIS_URL
+  );
+}
+
 async function readCards(): Promise<Card[]> {
   try {
+    if (!isRedisConfigured()) {
+      console.error('Redis not configured. Please set up Vercel KV in your project.');
+      return [];
+    }
+
     const cards = await kv.get<Card[]>(CARDS_KEY);
     return cards || [];
   } catch (error) {
     console.error('Error reading from KV:', error);
+    console.error('Environment check:', {
+      hasKvUrl: !!process.env.KV_REST_API_URL,
+      hasRedisUrl: !!process.env.REDIS_URL,
+    });
     return [];
   }
 }
 
 async function writeCards(cards: Card[]): Promise<void> {
+  if (!isRedisConfigured()) {
+    throw new Error('Redis not configured. Please set up Vercel KV in your project.');
+  }
+
   await kv.set(CARDS_KEY, cards);
 }
 
