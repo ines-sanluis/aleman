@@ -117,15 +117,20 @@ npm run dev
 4. Import your GitHub repository
 5. Click "Deploy"
 
-### Step 2: Set up Vercel KV
+### Step 2: Set up Vercel KV (Redis)
 
-1. In your Vercel project dashboard, go to the "Storage" tab
-2. Click "Create Database"
-3. Select "KV" (Redis)
+1. In your Vercel project dashboard, go to the **"Storage"** or **"Marketplace"** tab
+2. Search for **"Vercel KV"** or **"Redis"**
+3. Click **"Add"** or **"Create"**
 4. Choose a name (e.g., "german-cards-db")
-5. Select a region close to you
-6. Click "Create"
-7. Vercel will automatically add the required environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, etc.)
+5. Select the **Free Plan** (30MB - enough for ~40,000+ cards)
+6. Select a region close to you
+7. Connect it to your project
+8. Vercel will automatically add the required environment variables:
+   - `KV_URL` or `REDIS_URL`
+   - `KV_REST_API_URL`
+   - `KV_REST_API_TOKEN`
+   - `KV_REST_API_READ_ONLY_TOKEN`
 
 ### Step 3: Add OpenAI API Key
 
