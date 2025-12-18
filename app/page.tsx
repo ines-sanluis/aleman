@@ -5,11 +5,14 @@ import { Card } from '@/types/word';
 import { getAllCards } from '@/lib/storage';
 import { getDueCards } from '@/lib/srs';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [dueCards, setDueCards] = useState<Card[]>([]);
   const [totalCards, setTotalCards] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [reviewLimit, setReviewLimit] = useState(20);
 
   useEffect(() => {
     loadCards();
@@ -110,6 +113,10 @@ export default function Home() {
     );
   }
 
+  const handleStartReview = () => {
+    router.push(`/review?limit=${reviewLimit}`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -130,12 +137,38 @@ export default function Home() {
             <div className="text-sm text-gray-600 dark:text-gray-400">Total</div>
           </div>
         </div>
-        <Link
-          href="/review"
+
+        {/* Review Limit Selector */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            ¿Cuántas tarjetas quieres repasar?
+          </label>
+          <div className="grid grid-cols-5 gap-2">
+            {[10, 20, 30, 50, dueCards.length].map((limit) => (
+              <button
+                key={limit}
+                onClick={() => setReviewLimit(limit)}
+                className={`px-3 py-2 rounded-lg font-semibold text-sm transition-colors ${
+                  reviewLimit === limit
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+              >
+                {limit === dueCards.length ? 'Todas' : limit}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            Se priorizarán las tarjetas más atrasadas y se mezclarán con nuevas
+          </p>
+        </div>
+
+        <button
+          onClick={handleStartReview}
           className="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
         >
-          Iniciar Sesión de Repaso
-        </Link>
+          Iniciar Sesión de Repaso ({Math.min(reviewLimit, dueCards.length)} tarjetas)
+        </button>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">

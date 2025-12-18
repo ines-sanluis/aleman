@@ -128,6 +128,74 @@ export function getDueCards(cards: Card[]): Card[] {
 }
 
 /**
+ * Smart card selection algorithm for optimal learning
+ * Prioritizes overdue cards, mixes in new cards, and limits the review session
+ *
+ * @param cards - All available cards
+ * @param limit - Maximum number of cards to review
+ * @returns Optimally selected cards for review
+ */
+export function getSmartReviewCards(cards: Card[], limit: number): Card[] {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  // Categorize cards
+  const newCards = cards.filter(card => card.isNew && isCardDue(card));
+  const reviewCards = cards.filter(card => !card.isNew && isCardDue(card));
+
+  // Sort review cards by priority
+  const sortedReviewCards = reviewCards.sort((a, b) => {
+    const aDate = new Date(a.nextReviewDate).getTime();
+    const bDate = new Date(b.nextReviewDate).getTime();
+    const nowTime = now.getTime();
+
+    // Calculate how overdue each card is (in days)
+    const aOverdue = Math.max(0, (nowTime - aDate) / (1000 * 60 * 60 * 24));
+    const bOverdue = Math.max(0, (nowTime - bDate) / (1000 * 60 * 60 * 24));
+
+    // Priority: more overdue cards first
+    if (aOverdue !== bOverdue) {
+      return bOverdue - aOverdue;
+    }
+
+    // Secondary: lower ease factor (harder cards) first
+    return a.easeFactor - b.easeFactor;
+  });
+
+  // Shuffle new cards to keep variety
+  const shuffledNewCards = [...newCards].sort(() => Math.random() - 0.5);
+
+  // Determine mix ratio (70% review, 30% new cards)
+  const reviewCount = Math.ceil(limit * 0.7);
+  const newCount = limit - reviewCount;
+
+  // Select cards
+  const selectedReviewCards = sortedReviewCards.slice(0, reviewCount);
+  const selectedNewCards = shuffledNewCards.slice(0, newCount);
+
+  // If we don't have enough review cards, add more new cards
+  const remaining = limit - selectedReviewCards.length - selectedNewCards.length;
+  if (remaining > 0) {
+    selectedNewCards.push(...shuffledNewCards.slice(newCount, newCount + remaining));
+  }
+
+  // Mix them together (interleave for better learning)
+  const mixed: Card[] = [];
+  const maxLength = Math.max(selectedReviewCards.length, selectedNewCards.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    if (i < selectedReviewCards.length) {
+      mixed.push(selectedReviewCards[i]);
+    }
+    if (i < selectedNewCards.length) {
+      mixed.push(selectedNewCards[i]);
+    }
+  }
+
+  return mixed.slice(0, limit);
+}
+
+/**
  * Creates a new card with default SRS values
  */
 export function createNewCard(wordData: any): Card {

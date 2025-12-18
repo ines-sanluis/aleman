@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, ReviewButtonType } from '@/types/word';
 import { getAllCards, updateCard } from '@/lib/storage';
-import { getDueCards, calculateNextReview, getQualityFromButton, getIntervalPreview } from '@/lib/srs';
+import { getSmartReviewCards, calculateNextReview, getQualityFromButton, getIntervalPreview } from '@/lib/srs';
 import PronunciationButton from '@/components/PronunciationButton';
 import { translateWordType } from '@/lib/wordTypeTranslations';
 
 export default function ReviewPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [dueCards, setDueCards] = useState<Card[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -21,14 +22,17 @@ export default function ReviewPage() {
 
   const loadDueCards = async () => {
     const allCards = await getAllCards();
-    const due = getDueCards(allCards);
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? parseInt(limitParam, 10) : 20;
 
-    if (due.length === 0) {
+    const selected = getSmartReviewCards(allCards, limit);
+
+    if (selected.length === 0) {
       router.push('/');
       return;
     }
 
-    setDueCards(due);
+    setDueCards(selected);
     setLoading(false);
   };
 
