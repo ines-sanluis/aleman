@@ -1,43 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 import { Card } from '@/types/word';
 
 const CARDS_KEY = 'german-learning-cards';
 
-// Check if Redis is configured
-function isRedisConfigured(): boolean {
-  return !!(
-    process.env.KV_REST_API_URL ||
-    process.env.KV_URL ||
-    process.env.REDIS_URL
-  );
+// Initialize Redis client
+let redis: Redis | null = null;
+
+function getRedisClient(): Redis {
+  if (!redis) {
+    const redisUrl = process.env.REDIS_URL || process.env.KV_URL;
+
+    if (!redisUrl) {
+      throw new Error('REDIS_URL environment variable is not set. Please configure Redis in Vercel.');
+    }
+
+    redis = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      retryStrategy(times) {
+        const delay = Math.min(times * 50, 2000);
+        return delay;
+      },
+    });
+
+    redis.on('error', (err) => {
+      console.error('Redis connection error:', err);
+    });
+  }
+
+  return redis;
 }
 
 async function readCards(): Promise<Card[]> {
   try {
-    if (!isRedisConfigured()) {
-      console.error('Redis not configured. Please set up Vercel KV in your project.');
+    const client = getRedisClient();
+    const data = await client.get(CARDS_KEY);
+
+    if (!data) {
       return [];
     }
 
-    const cards = await kv.get<Card[]>(CARDS_KEY);
-    return cards || [];
+    return JSON.parse(data) as Card[];
   } catch (error) {
-    console.error('Error reading from KV:', error);
-    console.error('Environment check:', {
-      hasKvUrl: !!process.env.KV_REST_API_URL,
-      hasRedisUrl: !!process.env.REDIS_URL,
-    });
+    console.error('Error reading from Redis:', error);
+    console.error('Redis URL configured:', !!process.env.REDIS_URL);
     return [];
   }
 }
 
 async function writeCards(cards: Card[]): Promise<void> {
-  if (!isRedisConfigured()) {
-    throw new Error('Redis not configured. Please set up Vercel KV in your project.');
+  try {
+    const client = getRedisClient();
+    await client.set(CARDS_KEY, JSON.stringify(cards));
+  } catch (error) {
+    console.error('Error writing to Redis:', error);
+    throw error;
   }
-
-  await kv.set(CARDS_KEY, cards);
 }
 
 // GET all cards

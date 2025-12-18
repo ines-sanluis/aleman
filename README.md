@@ -28,10 +28,11 @@ A Next.js application for learning German vocabulary using AI-powered word enric
 
 - **Dark Mode Support**: Fully accessible dark theme with proper contrast
 
-- **Cloud Storage**: Cards saved to Vercel KV (Redis)
+- **Cloud Storage**: Cards saved to Redis
   - Access your cards from anywhere
   - Persistent cloud storage
   - Fast and reliable
+  - Works with any Redis provider (Upstash, Redis Cloud, etc.)
 
 ## Getting Started
 
@@ -104,7 +105,7 @@ npm run dev
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS (with dark mode support)
 - **AI**: OpenAI GPT-4o-mini (word enrichment) + TTS-1 (pronunciation)
-- **Storage**: Vercel KV (Redis)
+- **Storage**: Redis (via ioredis client)
 - **Algorithm**: SM-2 (SuperMemo 2) spaced repetition
 
 ## Deployment to Vercel
@@ -117,20 +118,18 @@ npm run dev
 4. Import your GitHub repository
 5. Click "Deploy"
 
-### Step 2: Set up Vercel KV (Redis)
+### Step 2: Set up Redis Database
 
 1. In your Vercel project dashboard, go to the **"Storage"** or **"Marketplace"** tab
-2. Search for **"Vercel KV"** or **"Redis"**
+2. Search for **"Redis"** (powered by Upstash)
 3. Click **"Add"** or **"Create"**
 4. Choose a name (e.g., "german-cards-db")
-5. Select the **Free Plan** (30MB - enough for ~40,000+ cards)
-6. Select a region close to you
-7. Connect it to your project
-8. Vercel will automatically add the required environment variables:
-   - `KV_URL` or `REDIS_URL`
-   - `KV_REST_API_URL`
-   - `KV_REST_API_TOKEN`
-   - `KV_REST_API_READ_ONLY_TOKEN`
+5. Select the **Free Plan** (30MB - enough for ~40,000+ flashcards!)
+6. Select a region close to your users
+7. Click **"Create & Connect"** to link it to your project
+8. Vercel will automatically add the `REDIS_URL` environment variable to your project
+
+**Note**: The free tier (30MB) is more than enough for personal use. You'd need ~40,000+ flashcards to fill it!
 
 ### Step 3: Add OpenAI API Key
 
