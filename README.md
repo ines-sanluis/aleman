@@ -28,10 +28,10 @@ A Next.js application for learning German vocabulary using AI-powered word enric
 
 - **Dark Mode Support**: Fully accessible dark theme with proper contrast
 
-- **File-Based Storage**: Cards saved to `data/cards.json`
-  - Access your cards across any platform with access to the project
-  - Commit to git for version control and backup
-  - No database required
+- **Cloud Storage**: Cards saved to Vercel KV (Redis)
+  - Access your cards from anywhere
+  - Persistent cloud storage
+  - Fast and reliable
 
 ## Getting Started
 
@@ -95,7 +95,7 @@ npm run dev
 ### 4. Editing Cards
 - Click the blue edit icon next to any card in the Library
 - Modify any field: word, translation, examples, conjugations, etc.
-- Changes are saved to `data/cards.json` immediately
+- Changes are saved to the cloud immediately
 - SRS scheduling data is preserved when editing
 
 ## Tech Stack
@@ -103,36 +103,48 @@ npm run dev
 - **Framework**: Next.js 14+ (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS (with dark mode support)
-- **AI**: OpenAI GPT-4o-mini
-- **Storage**: File system (`data/cards.json`)
+- **AI**: OpenAI GPT-4o-mini (word enrichment) + TTS-1 (pronunciation)
+- **Storage**: Vercel KV (Redis)
 - **Algorithm**: SM-2 (SuperMemo 2) spaced repetition
 
-## Data Storage & Sync
+## Deployment to Vercel
 
-Your cards are stored in `data/cards.json` in the project directory. This means:
+### Step 1: Create a Vercel Project
 
-- **Cross-Platform Access**: Any platform with access to the project files can access your cards
-- **Git Integration**: Commit `data/cards.json` to git for version control and backup
-- **Easy Backup**: The file is human-readable JSON that you can backup anywhere
-- **No Database Required**: Simple file-based storage, no setup needed
+1. Push your code to GitHub
+2. Go to [Vercel](https://vercel.com) and sign in
+3. Click "Add New" → "Project"
+4. Import your GitHub repository
+5. Click "Deploy"
 
-### Export/Import
+### Step 2: Set up Vercel KV
 
-You can still use the export/import feature for quick backups:
+1. In your Vercel project dashboard, go to the "Storage" tab
+2. Click "Create Database"
+3. Select "KV" (Redis)
+4. Choose a name (e.g., "german-cards-db")
+5. Select a region close to you
+6. Click "Create"
+7. Vercel will automatically add the required environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, etc.)
+
+### Step 3: Add OpenAI API Key
+
+1. In your Vercel project, go to "Settings" → "Environment Variables"
+2. Add `OPENAI_API_KEY` with your OpenAI API key
+3. Click "Save"
+4. Redeploy your project
+
+### Step 4: Done!
+
+Your app is now live! The cards are stored in Vercel KV and accessible from anywhere.
+
+## Export/Import
+
+Use the export/import feature for backups:
 
 1. Go to Library
 2. Click "Export" to download a backup JSON file
 3. Click "Import" to restore or merge cards from a backup file
-
-## Future Enhancements
-
-Consider adding:
-- Database support (Supabase, PlanetScale) for real-time multi-device sync
-- Audio pronunciation
-- More quiz modes (multiple choice, typing)
-- Learning statistics and progress charts
-- Deck/tag organization
-- Image support for vocabulary
 
 ## License
 

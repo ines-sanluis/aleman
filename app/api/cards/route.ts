@@ -1,22 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import { Card } from '@/types/word';
 
-const CARDS_FILE = path.join(process.cwd(), 'data', 'cards.json');
+const CARDS_KEY = 'german-learning-cards';
 
 async function readCards(): Promise<Card[]> {
   try {
-    const data = await fs.readFile(CARDS_FILE, 'utf-8');
-    return JSON.parse(data) as Card[];
+    const cards = await kv.get<Card[]>(CARDS_KEY);
+    return cards || [];
   } catch (error) {
-    // If file doesn't exist or is empty, return empty array
+    console.error('Error reading from KV:', error);
     return [];
   }
 }
 
 async function writeCards(cards: Card[]): Promise<void> {
-  await fs.writeFile(CARDS_FILE, JSON.stringify(cards, null, 2), 'utf-8');
+  await kv.set(CARDS_KEY, cards);
 }
 
 // GET all cards
