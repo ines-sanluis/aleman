@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, ReviewButtonType } from '@/types/word';
 import { getAllCards, updateCard } from '@/lib/storage';
@@ -8,7 +8,7 @@ import { getSmartReviewCards, calculateNextReview, getQualityFromButton, getInte
 import PronunciationButton from '@/components/PronunciationButton';
 import { translateWordType } from '@/lib/wordTypeTranslations';
 
-export default function ReviewPage() {
+function ReviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [dueCards, setDueCards] = useState<Card[]>([]);
@@ -228,5 +228,17 @@ export default function ReviewPage() {
         {dueCards.length - currentIndex - 1} tarjetas restantes
       </div>
     </div>
+  );
+}
+
+export default function ReviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-gray-500 dark:text-gray-400">Cargando...</div>
+      </div>
+    }>
+      <ReviewContent />
+    </Suspense>
   );
 }
