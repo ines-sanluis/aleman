@@ -26,12 +26,27 @@ export function calculateNextReview(card: Card, quality: number): ReviewResult {
     repetitions = 0;
     interval = 1; // Review again tomorrow
   } else {
-    // Successful recall
+    // Successful recall - use graduating intervals based on quality
     if (repetitions === 0) {
-      interval = 1;
+      // First successful review - differentiate by quality
+      if (quality === 3) {
+        interval = 1; // Hard: 1 day
+      } else if (quality === 4) {
+        interval = 3; // Good: 3 days
+      } else {
+        interval = 5; // Easy: 5 days
+      }
     } else if (repetitions === 1) {
-      interval = 6;
+      // Second successful review - more differentiation
+      if (quality === 3) {
+        interval = 3; // Hard: 3 days
+      } else if (quality === 4) {
+        interval = 7; // Good: 7 days
+      } else {
+        interval = 14; // Easy: 14 days
+      }
     } else {
+      // Third and beyond - use ease factor multiplier
       interval = Math.round(interval * easeFactor);
     }
     repetitions += 1;

@@ -167,3 +167,37 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
+
+// PATCH - Reset all progress (keep words, reset SRS data)
+export async function PATCH() {
+  try {
+    const cards = await readCards();
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    // Reset all SRS fields to default values
+    const resetCards = cards.map(card => ({
+      ...card,
+      easeFactor: 2.5,
+      interval: 0,
+      repetitions: 0,
+      nextReviewDate: now.toISOString(),
+      lastReviewDate: null,
+      isNew: true,
+    }));
+
+    await writeCards(resetCards);
+
+    return NextResponse.json({
+      success: true,
+      message: `Reset progress for ${resetCards.length} cards`,
+      cards: resetCards
+    });
+  } catch (error: any) {
+    console.error('Error resetting progress:', error);
+    return NextResponse.json(
+      { error: 'Failed to reset progress' },
+      { status: 500 }
+    );
+  }
+}

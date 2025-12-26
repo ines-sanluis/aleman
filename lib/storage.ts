@@ -103,3 +103,23 @@ export async function importCards(jsonString: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Reset all SRS progress (keep words, reset repetitions/intervals)
+ */
+export async function resetAllProgress(): Promise<boolean> {
+  try {
+    const response = await fetch('/api/cards', {
+      method: 'PATCH',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to reset progress');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error resetting progress:', error);
+    return false;
+  }
+}

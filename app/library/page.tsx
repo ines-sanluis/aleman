@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card } from '@/types/word';
-import { getAllCards, deleteCard, exportCards, importCards, updateCard } from '@/lib/storage';
+import { getAllCards, deleteCard, exportCards, importCards, updateCard, resetAllProgress } from '@/lib/storage';
 import { isCardDue } from '@/lib/srs';
 import EditCardModal from '@/components/EditCardModal';
 import PronunciationButton from '@/components/PronunciationButton';
@@ -76,6 +76,18 @@ export default function LibraryPage() {
     }
   };
 
+  const handleResetProgress = async () => {
+    if (confirm('¿Estás seguro de que quieres reiniciar todo el progreso? Esto mantendrá tus palabras pero reiniciará todas las repeticiones e intervalos.')) {
+      const success = await resetAllProgress();
+      if (success) {
+        loadCards();
+        alert('¡Progreso reiniciado exitosamente!');
+      } else {
+        alert('Error al reiniciar el progreso. Por favor intenta de nuevo.');
+      }
+    }
+  };
+
   const filteredCards = cards
     .filter(card => {
       const matchesSearch = card.wordData.german.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -109,7 +121,7 @@ export default function LibraryPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Biblioteca ({cards.length} tarjetas)
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={handleExport}
               disabled={cards.length === 0}
@@ -126,6 +138,13 @@ export default function LibraryPage() {
                 className="hidden"
               />
             </label>
+            <button
+              onClick={handleResetProgress}
+              disabled={cards.length === 0}
+              className="px-4 py-2 bg-red-500 dark:bg-red-600 text-white rounded-lg font-semibold hover:bg-red-600 dark:hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+            >
+              Reiniciar Progreso
+            </button>
           </div>
         </div>
 
