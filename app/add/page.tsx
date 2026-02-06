@@ -84,9 +84,9 @@ export default function AddWords() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          Añadir Nuevas Palabras
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8 mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+          ✨ Añadir Nuevas Palabras
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           Ingresa palabras en alemán (una por línea o separadas por comas). La
@@ -98,7 +98,7 @@ export default function AddWords() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ingresa palabras en alemán, ej.:&#10;Haus&#10;laufen&#10;schön"
-            className="w-full h-40 p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+            className="w-full h-40 p-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-all"
             disabled={loading}
           />
 
@@ -111,24 +111,24 @@ export default function AddWords() {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="mt-4 w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            className="mt-4 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-6 py-4 rounded-xl font-bold hover:shadow-xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer transition-all duration-200"
           >
-            {loading ? "Procesando..." : "Enriquecer palabras"}
+            {loading ? "✨ Procesando..." : "🤖 Enriquecer con IA"}
           </button>
         </form>
       </div>
 
       {enrichedWords.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Vista Previa ({enrichedWords.length} palabras)
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+            🎯 Vista Previa ({enrichedWords.length} palabras)
           </h3>
 
-          <div className="space-y-4 max-h-[600px] overflow-y-auto mb-6">
+          <div className="space-y-4 max-h-[600px] overflow-y-auto mb-6 pr-2">
             {enrichedWords.map((word, index) => (
               <div
                 key={index}
-                className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:border-blue-300 dark:hover:border-blue-500 transition-colors"
+                className="border-2 border-gray-200 dark:border-gray-600 rounded-xl p-5 hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition-all duration-200"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
@@ -203,9 +203,9 @@ export default function AddWords() {
             <button
               onClick={handleSave}
               disabled={loading}
-              className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 rounded-xl font-bold hover:shadow-xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer transition-all duration-200"
             >
-              {loading ? "Guardando..." : "Guardar Todas las Tarjetas"}
+              {loading ? "💾 Guardando..." : "💾 Guardar Todas las Tarjetas"}
             </button>
             <button
               onClick={() => {
@@ -213,9 +213,9 @@ export default function AddWords() {
                 setInput("");
               }}
               disabled={loading}
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              className="px-6 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer transition-all duration-200"
             >
-              Cancelar
+              ❌ Cancelar
             </button>
           </div>
         </div>

@@ -98,15 +98,15 @@ export default function Home() {
         <div className="flex gap-4 justify-center">
           <Link
             href="/add"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200"
           >
-            Añadir Más Palabras
+            ✨ Añadir Más Palabras
           </Link>
           <Link
             href="/library"
-            className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105 transition-all duration-200"
           >
-            Ver Biblioteca
+            📚 Ver Biblioteca
           </Link>
         </div>
       </div>
@@ -119,28 +119,28 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          Repaso de Hoy
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          📚 Repaso de Hoy
         </h2>
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-xl p-6 border border-indigo-100 dark:border-indigo-800/50 hover:scale-105 transition-transform duration-200">
+            <div className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               {dueCards.length}
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Pendientes</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Pendientes</div>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <div className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 border border-gray-200 dark:border-gray-600 hover:scale-105 transition-transform duration-200">
+            <div className="text-4xl font-bold text-gray-700 dark:text-gray-300">
               {totalCards}
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Total</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Total</div>
           </div>
         </div>
 
         {/* Review Limit Selector */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
             ¿Cuántas tarjetas quieres repasar?
           </label>
           <div className="grid grid-cols-5 gap-2">
@@ -148,49 +148,49 @@ export default function Home() {
               <button
                 key={limit}
                 onClick={() => setReviewLimit(limit)}
-                className={`px-3 py-2 rounded-lg font-semibold text-sm transition-colors cursor-pointer ${
+                className={`px-3 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 cursor-pointer ${
                   reviewLimit === limit
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md scale-105'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'
                 }`}
               >
                 {limit === dueCards.length ? 'Todas' : limit}
               </button>
             ))}
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            Se priorizarán las tarjetas más atrasadas y se mezclarán con nuevas
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+            💡 Se priorizarán las tarjetas más atrasadas y se mezclarán con nuevas
           </p>
         </div>
 
         <button
           onClick={handleStartReview}
-          className="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
+          className="block w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white text-center px-6 py-4 rounded-xl font-semibold hover:shadow-xl hover:scale-[1.02] transition-all duration-200 cursor-pointer"
         >
-          Iniciar Sesión de Repaso ({Math.min(reviewLimit, dueCards.length)} tarjetas)
+          🚀 Iniciar Sesión de Repaso ({Math.min(reviewLimit, dueCards.length)} tarjetas)
         </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Estadísticas Rápidas
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+          📊 Estadísticas Rápidas
         </h3>
-        <div className="space-y-2 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Nuevas:</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">
+        <div className="space-y-3">
+          <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">🆕 Nuevas</span>
+            <span className="font-bold text-lg text-blue-600 dark:text-blue-400">
               {dueCards.filter(c => c.state === 'new').length}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Aprendiendo:</span>
-            <span className="font-semibold text-orange-600 dark:text-orange-400">
+          <div className="flex justify-between items-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">🎯 Aprendiendo</span>
+            <span className="font-bold text-lg text-orange-600 dark:text-orange-400">
               {dueCards.filter(c => c.state === 'learning').length}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Repaso:</span>
-            <span className="font-semibold text-green-600 dark:text-green-400">
+          <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">✅ Repaso</span>
+            <span className="font-bold text-lg text-green-600 dark:text-green-400">
               {dueCards.filter(c => c.state === 'review').length}
             </span>
           </div>

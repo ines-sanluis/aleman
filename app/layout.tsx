@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Guirilandia - Repetición Espaciada",
-  description: "Aprende vocabulario alemán con repetición espaciada",
+  title: "Merken - Aprende Alemán con Inteligencia",
+  description: "Domina el vocabulario alemán con repetición espaciada inteligente",
 };
 
 export default function RootLayout({

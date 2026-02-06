@@ -80,40 +80,45 @@ function ReviewContent() {
     <div className="max-w-2xl mx-auto">
       {/* Progress Bar */}
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-            {currentIndex + 1} / {dueCards.length}
+        <div className="flex justify-between items-center mb-3">
+          <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
+            📝 {currentIndex + 1} / {dueCards.length}
           </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-sm font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             {Math.round(progress)}% completado
           </span>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 h-3 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
       {/* Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 min-h-[400px] flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 md:p-10 min-h-[450px] flex flex-col transform transition-all duration-300 hover:shadow-3xl">
         {/* Question Side */}
         <div className="flex-1 flex flex-col justify-center">
           <div className="text-center mb-8">
-            {currentCard.isNew && (
-              <span className="inline-block px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-semibold rounded-full mb-4">
-                Tarjeta Nueva
+            {currentCard.state === 'new' && (
+              <span className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-700 dark:text-blue-400 text-sm font-bold rounded-full mb-4 border border-blue-200 dark:border-blue-800">
+                🆕 Tarjeta Nueva
               </span>
             )}
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+            {currentCard.state === 'learning' && (
+              <span className="inline-block px-4 py-2 bg-gradient-to-r from-orange-100 to-yellow-100 dark:from-orange-900/30 dark:to-yellow-900/30 text-orange-700 dark:text-orange-400 text-sm font-bold rounded-full mb-4 border border-orange-200 dark:border-orange-800">
+                🎯 Aprendiendo
+              </span>
+            )}
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
                 {currentCard.wordData.gender && `${currentCard.wordData.gender} `}
                 {currentCard.wordData.german}
               </h2>
               <PronunciationButton text={currentCard.wordData.german} size="lg" />
             </div>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-gray-500 dark:text-gray-400 font-medium">
               {translateWordType(currentCard.wordData.wordType)}
               {currentCard.wordData.plural && ` • Plural: ${currentCard.wordData.plural}`}
             </p>
@@ -179,43 +184,43 @@ function ReviewContent() {
           {!showAnswer ? (
             <button
               onClick={() => setShowAnswer(true)}
-              className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg cursor-pointer"
+              className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-6 py-4 rounded-xl font-bold hover:shadow-xl hover:scale-[1.02] transition-all duration-200 text-lg cursor-pointer"
             >
-              Mostrar Respuesta
+              🔍 Mostrar Respuesta
             </button>
           ) : (
-            <div className="space-y-3">
-              <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <div className="space-y-4">
+              <p className="text-center text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4">
                 ¿Qué tan bien conocías esta palabra?
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <button
                   onClick={() => handleReview('again')}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="text-sm">Otra vez</div>
-                  <div className="text-xs opacity-90">{intervalPreviews.again}</div>
+                  <div className="text-sm mb-1">😔 Otra vez</div>
+                  <div className="text-xs opacity-90 font-normal">{intervalPreviews.again}</div>
                 </button>
                 <button
                   onClick={() => handleReview('hard')}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="text-sm">Difícil</div>
-                  <div className="text-xs opacity-90">{intervalPreviews.hard}</div>
+                  <div className="text-sm mb-1">😅 Difícil</div>
+                  <div className="text-xs opacity-90 font-normal">{intervalPreviews.hard}</div>
                 </button>
                 <button
                   onClick={() => handleReview('good')}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="text-sm">Bien</div>
-                  <div className="text-xs opacity-90">{intervalPreviews.good}</div>
+                  <div className="text-sm mb-1">😊 Bien</div>
+                  <div className="text-xs opacity-90 font-normal">{intervalPreviews.good}</div>
                 </button>
                 <button
                   onClick={() => handleReview('easy')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-4 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="text-sm">Fácil</div>
-                  <div className="text-xs opacity-90">{intervalPreviews.easy}</div>
+                  <div className="text-sm mb-1">🎉 Fácil</div>
+                  <div className="text-xs opacity-90 font-normal">{intervalPreviews.easy}</div>
                 </button>
               </div>
             </div>
