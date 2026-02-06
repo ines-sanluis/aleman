@@ -64,13 +64,21 @@ export default function AddWords() {
   const handleSave = async () => {
     if (enrichedWords.length === 0) return;
 
-    const cards = enrichedWords.map(wordData => createNewCard(wordData));
-    const success = await addCards(cards);
+    try {
+      setLoading(true);
+      const cards = enrichedWords.map(wordData => createNewCard(wordData));
+      const success = await addCards(cards);
 
-    if (success) {
-      router.push('/');
-    } else {
-      setError('Error al guardar las tarjetas. Por favor intenta de nuevo.');
+      if (success) {
+        router.push('/');
+      } else {
+        setError('Error al guardar las tarjetas. Por favor intenta de nuevo.');
+      }
+    } catch (err: any) {
+      console.error('Error saving cards:', err);
+      setError(`Error al guardar: ${err.message || 'Error desconocido'}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,16 +189,18 @@ export default function AddWords() {
           <div className="flex gap-4">
             <button
               onClick={handleSave}
-              className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+              disabled={loading}
+              className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
             >
-              Guardar Todas las Tarjetas
+              {loading ? 'Guardando...' : 'Guardar Todas las Tarjetas'}
             </button>
             <button
               onClick={() => {
                 setEnrichedWords([]);
                 setInput('');
               }}
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              disabled={loading}
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Cancelar
             </button>
