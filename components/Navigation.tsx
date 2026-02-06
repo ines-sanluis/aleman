@@ -1,12 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { logout } from '@/lib/auth';
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (path: string) => pathname === path;
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg md:relative md:border-0 md:shadow-none md:bg-transparent dark:md:bg-transparent md:mb-6">
@@ -83,6 +90,26 @@ export default function Navigation() {
             </svg>
             <span className="text-xs">Biblioteca</span>
           </Link>
+
+          <button
+            onClick={handleLogout}
+            className="flex flex-col items-center py-3 px-6 transition-colors text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
+          >
+            <svg
+              className="w-6 h-6 mb-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            <span className="text-xs">Salir</span>
+          </button>
         </div>
       </div>
     </nav>
