@@ -1,8 +1,12 @@
-import { Card, ReviewButtonType } from '@/types/word';
+import { Card, ReviewButtonType, CardState } from '@/types/word';
 
 /**
- * SM-2 (SuperMemo 2) Algorithm Implementation
- * Based on: https://www.supermemo.com/en/blog/application-of-a-computer-to-improve-the-results-obtained-in-working-with-the-supermemo-method
+ * Anki-style Spaced Repetition System
+ *
+ * State machine: new → learning → review
+ * - New cards: never seen before
+ * - Learning: short-term reinforcement with learning steps
+ * - Review: long-term retention with exponential intervals
  */
 
 export interface ReviewResult {
@@ -10,85 +14,192 @@ export interface ReviewResult {
   interval: number;
   repetitions: number;
   nextReviewDate: string;
+  state: CardState;
+  learningStep: number;
 }
 
 /**
- * Calculates the next review parameters based on the SM-2 algorithm
- * @param card - The card being reviewed
- * @param quality - Quality rating (0-5)
- * @returns Updated review parameters
+ * Learning steps in days
+ * New cards go through these steps before graduating to review
  */
-export function calculateNextReview(card: Card, quality: number): ReviewResult {
-  let { easeFactor, interval, repetitions } = card;
-
-  // Quality < 3 means the card was forgotten
-  if (quality < 3) {
-    repetitions = 0;
-    interval = 1; // Review again tomorrow
-  } else {
-    // Successful recall - use graduating intervals based on quality
-    if (repetitions === 0) {
-      // First successful review - differentiate by quality
-      if (quality === 3) {
-        interval = 1; // Hard: 1 day
-      } else if (quality === 4) {
-        interval = 3; // Good: 3 days
-      } else {
-        interval = 5; // Easy: 5 days
-      }
-    } else if (repetitions === 1) {
-      // Second successful review - more differentiation
-      if (quality === 3) {
-        interval = 3; // Hard: 3 days
-      } else if (quality === 4) {
-        interval = 7; // Good: 7 days
-      } else {
-        interval = 14; // Easy: 14 days
-      }
-    } else {
-      // Third and beyond - use ease factor multiplier
-      interval = Math.round(interval * easeFactor);
-    }
-    repetitions += 1;
-
-    // Update ease factor
-    easeFactor = easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-
-    // Ease factor should not go below 1.3
-    if (easeFactor < 1.3) {
-      easeFactor = 1.3;
-    }
-  }
-
-  // Calculate next review date
-  const nextReviewDate = new Date();
-  nextReviewDate.setDate(nextReviewDate.getDate() + interval);
-  nextReviewDate.setHours(0, 0, 0, 0); // Reset to start of day
-
-  return {
-    easeFactor: Number(easeFactor.toFixed(2)),
-    interval,
-    repetitions,
-    nextReviewDate: nextReviewDate.toISOString(),
-  };
-}
+const LEARNING_STEPS = [1, 6]; // 1 day, then 6 days
 
 /**
- * Maps review button types to quality ratings
+ * Graduating interval: interval when card moves from learning → review
+ */
+const GRADUATING_INTERVAL = 1;
+
+/**
+ * Easy interval: interval when "Easy" is pressed on a new card
+ */
+const EASY_INTERVAL = 4;
+
+/**
+ * Interval modifiers based on difficulty
+ */
+const MODIFIERS = {
+  again: 0,      // Reset to learning
+  hard: 0.8,     // 80% of normal interval
+  good: 1.0,     // 100% of normal interval
+  easy: 1.3,     // 130% of normal interval
+};
+
+/**
+ * Maps review button types to quality ratings (0-3 scale)
  */
 export function getQualityFromButton(buttonType: ReviewButtonType): number {
   const qualityMap: Record<ReviewButtonType, number> = {
-    again: 0, // Complete failure
-    hard: 3,  // Correct but difficult
-    good: 4,  // Correct with some hesitation
-    easy: 5,  // Perfect response
+    again: 0, // Failure
+    hard: 1,  // Difficult
+    good: 2,  // Good
+    easy: 3,  // Easy
   };
   return qualityMap[buttonType];
 }
 
 /**
+ * Updates ease factor based on performance (Anki-style)
+ */
+function updateEaseFactor(currentEase: number, quality: number): number {
+  // Formula: EF' = EF + (0.1 - (3 - q) * (0.08 + (3 - q) * 0.02))
+  // where q is quality (0-3)
+  const newEase = currentEase + (0.1 - (3 - quality) * (0.08 + (3 - quality) * 0.02));
+
+  // Minimum ease factor is 1.3
+  return Math.max(1.3, newEase);
+}
+
+/**
+ * Calculates the next review parameters based on card state and user feedback
+ */
+export function calculateNextReview(card: Card, quality: number): ReviewResult {
+  let { easeFactor, interval, repetitions, state, learningStep } = card;
+
+  // Again button: reset to learning
+  if (quality === 0) {
+    return {
+      easeFactor,
+      interval: 0,
+      repetitions: 0,
+      nextReviewDate: calculateNextDate(LEARNING_STEPS[0]),
+      state: 'learning',
+      learningStep: 0,
+    };
+  }
+
+  // Handle based on current state
+  if (state === 'new' || state === 'learning') {
+    return handleLearningCard(card, quality);
+  } else {
+    return handleReviewCard(card, quality);
+  }
+}
+
+/**
+ * Handles new/learning cards
+ */
+function handleLearningCard(card: Card, quality: number): ReviewResult {
+  const { easeFactor, learningStep } = card;
+
+  // Easy on a new/learning card: graduate immediately with easy interval
+  if (quality === 3) {
+    return {
+      easeFactor: updateEaseFactor(easeFactor, quality),
+      interval: EASY_INTERVAL,
+      repetitions: 1,
+      nextReviewDate: calculateNextDate(EASY_INTERVAL),
+      state: 'review',
+      learningStep: 0,
+    };
+  }
+
+  // Hard or Good: advance through learning steps
+  const nextStep = learningStep + 1;
+
+  // Still in learning phase
+  if (nextStep < LEARNING_STEPS.length) {
+    return {
+      easeFactor,
+      interval: 0,
+      repetitions: 0,
+      nextReviewDate: calculateNextDate(LEARNING_STEPS[nextStep]),
+      state: 'learning',
+      learningStep: nextStep,
+    };
+  }
+
+  // Graduate to review state
+  return {
+    easeFactor: updateEaseFactor(easeFactor, quality),
+    interval: GRADUATING_INTERVAL,
+    repetitions: 1,
+    nextReviewDate: calculateNextDate(GRADUATING_INTERVAL),
+    state: 'review',
+    learningStep: 0,
+  };
+}
+
+/**
+ * Handles review cards (long-term retention)
+ */
+function handleReviewCard(card: Card, quality: number): ReviewResult {
+  let { easeFactor, interval, repetitions } = card;
+
+  // Update ease factor
+  easeFactor = updateEaseFactor(easeFactor, quality);
+
+  // Calculate new interval based on quality and repetitions
+  let newInterval: number;
+
+  if (repetitions === 0) {
+    // First review after graduation
+    newInterval = GRADUATING_INTERVAL;
+  } else if (repetitions === 1) {
+    // Second review
+    newInterval = 6;
+  } else {
+    // Third review and beyond: use ease factor
+    const modifier = getModifier(quality);
+    newInterval = Math.round(interval * easeFactor * modifier);
+  }
+
+  // Hard button: reduce interval but don't fail
+  if (quality === 1) {
+    newInterval = Math.max(1, Math.round(newInterval * MODIFIERS.hard));
+  }
+
+  return {
+    easeFactor: Number(easeFactor.toFixed(2)),
+    interval: newInterval,
+    repetitions: repetitions + 1,
+    nextReviewDate: calculateNextDate(newInterval),
+    state: 'review',
+    learningStep: 0,
+  };
+}
+
+/**
+ * Gets the interval modifier based on quality
+ */
+function getModifier(quality: number): number {
+  if (quality === 1) return MODIFIERS.hard;
+  if (quality === 2) return MODIFIERS.good;
+  if (quality === 3) return MODIFIERS.easy;
+  return MODIFIERS.good;
+}
+
+/**
+ * Calculates the next review date
+ */
+function calculateNextDate(daysFromNow: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  date.setHours(0, 0, 0, 0);
+  return date.toISOString();
+}
+
+/**
  * Gets the interval preview for each button
- * Useful for showing "Again: <10min, Hard: 1d, Good: 3d, Easy: 4d"
  */
 export function getIntervalPreview(card: Card): Record<ReviewButtonType, string> {
   const previews: Record<ReviewButtonType, string> = {
@@ -104,18 +215,30 @@ export function getIntervalPreview(card: Card): Record<ReviewButtonType, string>
     const quality = getQualityFromButton(button);
     const result = calculateNextReview(card, quality);
 
-    if (result.interval === 0) {
-      previews[button] = '<10m';
-    } else if (result.interval === 1) {
-      previews[button] = '1d';
-    } else if (result.interval < 30) {
-      previews[button] = `${result.interval}d`;
-    } else if (result.interval < 365) {
-      const months = Math.round(result.interval / 30);
-      previews[button] = `${months}mo`;
+    if (result.state === 'learning') {
+      // Show learning step
+      const stepIndex = result.learningStep;
+      if (stepIndex < LEARNING_STEPS.length) {
+        const days = LEARNING_STEPS[stepIndex];
+        previews[button] = days === 1 ? '1d' : `${days}d`;
+      } else {
+        previews[button] = '1d';
+      }
     } else {
-      const years = Math.round(result.interval / 365);
-      previews[button] = `${years}y`;
+      // Show review interval
+      if (result.interval === 0) {
+        previews[button] = '1d';
+      } else if (result.interval === 1) {
+        previews[button] = '1d';
+      } else if (result.interval < 30) {
+        previews[button] = `${result.interval}d`;
+      } else if (result.interval < 365) {
+        const months = Math.round(result.interval / 30);
+        previews[button] = `${months}mo`;
+      } else {
+        const years = (result.interval / 365).toFixed(1);
+        previews[button] = `${years}y`;
+      }
     }
   });
 
@@ -137,7 +260,6 @@ export function isCardDue(card: Card): boolean {
  */
 export function getDueCards(cards: Card[]): Card[] {
   return cards.filter(isCardDue).sort((a, b) => {
-    // Sort by next review date (oldest first)
     return new Date(a.nextReviewDate).getTime() - new Date(b.nextReviewDate).getTime();
   });
 }
@@ -145,69 +267,85 @@ export function getDueCards(cards: Card[]): Card[] {
 /**
  * Smart card selection algorithm for optimal learning
  * Prioritizes overdue cards, mixes in new cards, and limits the review session
- *
- * @param cards - All available cards
- * @param limit - Maximum number of cards to review
- * @returns Optimally selected cards for review
  */
 export function getSmartReviewCards(cards: Card[], limit: number): Card[] {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
 
-  // Categorize cards
-  const newCards = cards.filter(card => card.isNew && isCardDue(card));
-  const reviewCards = cards.filter(card => !card.isNew && isCardDue(card));
+  // Categorize cards by state
+  const newCards = cards.filter(card => card.state === 'new' && isCardDue(card));
+  const learningCards = cards.filter(card => card.state === 'learning' && isCardDue(card));
+  const reviewCards = cards.filter(card => card.state === 'review' && isCardDue(card));
 
-  // Sort review cards by priority
-  const sortedReviewCards = reviewCards.sort((a, b) => {
+  // Sort by priority
+  const sortedLearning = learningCards.sort((a, b) => {
+    return new Date(a.nextReviewDate).getTime() - new Date(b.nextReviewDate).getTime();
+  });
+
+  const sortedReview = reviewCards.sort((a, b) => {
     const aDate = new Date(a.nextReviewDate).getTime();
     const bDate = new Date(b.nextReviewDate).getTime();
     const nowTime = now.getTime();
 
-    // Calculate how overdue each card is (in days)
+    // Calculate how overdue each card is
     const aOverdue = Math.max(0, (nowTime - aDate) / (1000 * 60 * 60 * 24));
     const bOverdue = Math.max(0, (nowTime - bDate) / (1000 * 60 * 60 * 24));
 
-    // Priority: more overdue cards first
     if (aOverdue !== bOverdue) {
       return bOverdue - aOverdue;
     }
 
-    // Secondary: lower ease factor (harder cards) first
+    // Secondary: harder cards first
     return a.easeFactor - b.easeFactor;
   });
 
-  // Shuffle new cards to keep variety
-  const shuffledNewCards = [...newCards].sort(() => Math.random() - 0.5);
+  const shuffledNew = [...newCards].sort(() => Math.random() - 0.5);
 
-  // Determine mix ratio (70% review, 30% new cards)
-  const reviewCount = Math.ceil(limit * 0.7);
-  const newCount = limit - reviewCount;
+  // Mix ratio: prioritize learning, then review, then new
+  // 50% review, 30% learning, 20% new
+  const reviewCount = Math.ceil(limit * 0.5);
+  const learningCount = Math.ceil(limit * 0.3);
+  const newCount = limit - reviewCount - learningCount;
 
-  // Select cards
-  const selectedReviewCards = sortedReviewCards.slice(0, reviewCount);
-  const selectedNewCards = shuffledNewCards.slice(0, newCount);
+  const selected = [
+    ...sortedLearning.slice(0, learningCount),
+    ...sortedReview.slice(0, reviewCount),
+    ...shuffledNew.slice(0, newCount),
+  ];
 
-  // If we don't have enough review cards, add more new cards
-  const remaining = limit - selectedReviewCards.length - selectedNewCards.length;
+  // If we don't have enough, fill with whatever is available
+  const remaining = limit - selected.length;
   if (remaining > 0) {
-    selectedNewCards.push(...shuffledNewCards.slice(newCount, newCount + remaining));
+    const allRemaining = [
+      ...sortedLearning.slice(learningCount),
+      ...sortedReview.slice(reviewCount),
+      ...shuffledNew.slice(newCount),
+    ];
+    selected.push(...allRemaining.slice(0, remaining));
   }
 
-  // Mix them together (interleave for better learning)
+  // Interleave for better learning experience
+  return interleaveCards(selected).slice(0, limit);
+}
+
+/**
+ * Interleaves different card types for better learning
+ */
+function interleaveCards(cards: Card[]): Card[] {
+  const learning = cards.filter(c => c.state === 'learning');
+  const review = cards.filter(c => c.state === 'review');
+  const newCards = cards.filter(c => c.state === 'new');
+
   const mixed: Card[] = [];
-  const maxLength = Math.max(selectedReviewCards.length, selectedNewCards.length);
+  const maxLength = Math.max(learning.length, review.length, newCards.length);
 
   for (let i = 0; i < maxLength; i++) {
-    if (i < selectedReviewCards.length) {
-      mixed.push(selectedReviewCards[i]);
-    }
-    if (i < selectedNewCards.length) {
-      mixed.push(selectedNewCards[i]);
-    }
+    if (i < review.length) mixed.push(review[i]);
+    if (i < learning.length) mixed.push(learning[i]);
+    if (i < newCards.length) mixed.push(newCards[i]);
   }
 
-  return mixed.slice(0, limit);
+  return mixed;
 }
 
 /**
@@ -223,9 +361,11 @@ export function createNewCard(wordData: any): Card {
     easeFactor: 2.5,
     interval: 0,
     repetitions: 0,
-    nextReviewDate: now.toISOString(), // Due today
+    nextReviewDate: now.toISOString(),
     lastReviewDate: null,
-    isNew: true,
+    state: 'new',
+    learningStep: 0,
+    isNew: true, // Legacy field
     createdAt: new Date().toISOString(),
   };
 }

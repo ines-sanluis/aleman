@@ -230,9 +230,19 @@ export default function LibraryPage() {
                             En {daysUntil} día{daysUntil !== 1 ? 's' : ''}
                           </span>
                         )}
-                        {card.isNew && (
-                          <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-semibold rounded">
+                        {card.state === 'new' && (
+                          <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-semibold rounded text-xs">
                             Nueva
+                          </span>
+                        )}
+                        {card.state === 'learning' && (
+                          <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 font-semibold rounded text-xs">
+                            Aprendiendo
+                          </span>
+                        )}
+                        {card.state === 'review' && card.repetitions >= 5 && (
+                          <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-semibold rounded text-xs">
+                            Consolidada
                           </span>
                         )}
                       </div>

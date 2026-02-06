@@ -177,15 +177,21 @@ export default function Home() {
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Tarjetas nuevas:</span>
-            <span className="font-semibold text-gray-900 dark:text-gray-100">
-              {dueCards.filter(c => c.isNew).length}
+            <span className="text-gray-600 dark:text-gray-400">Nuevas:</span>
+            <span className="font-semibold text-blue-600 dark:text-blue-400">
+              {dueCards.filter(c => c.state === 'new').length}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Tarjetas de repaso:</span>
-            <span className="font-semibold text-gray-900 dark:text-gray-100">
-              {dueCards.filter(c => !c.isNew).length}
+            <span className="text-gray-600 dark:text-gray-400">Aprendiendo:</span>
+            <span className="font-semibold text-orange-600 dark:text-orange-400">
+              {dueCards.filter(c => c.state === 'learning').length}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600 dark:text-gray-400">Repaso:</span>
+            <span className="font-semibold text-green-600 dark:text-green-400">
+              {dueCards.filter(c => c.state === 'review').length}
             </span>
           </div>
         </div>

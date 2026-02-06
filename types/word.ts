@@ -15,6 +15,8 @@ export interface WordData {
   pastTense?: string; // For verbs - past tense forms
 }
 
+export type CardState = 'new' | 'learning' | 'review';
+
 export interface Card {
   id: string;
   wordData: WordData;
@@ -26,8 +28,12 @@ export interface Card {
   nextReviewDate: string; // ISO date string
   lastReviewDate: string | null;
 
-  // State
-  isNew: boolean; // Never reviewed
+  // State machine
+  state: CardState; // new → learning → review
+  learningStep: number; // Current step in learning phase (0-indexed)
+
+  // Legacy field (kept for backwards compatibility)
+  isNew: boolean; // Deprecated: use state === 'new' instead
 
   createdAt: string;
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Redis from 'ioredis';
 import { Card } from '@/types/word';
+import { migrateCards } from '@/lib/migration';
 
 const CARDS_KEY = 'german-learning-cards';
 
@@ -40,7 +41,9 @@ async function readCards(): Promise<Card[]> {
       return [];
     }
 
-    return JSON.parse(data) as Card[];
+    const cards = JSON.parse(data);
+    // Automatically migrate old cards to new schema
+    return migrateCards(cards);
   } catch (error) {
     console.error('Error reading from Redis:', error);
     console.error('Redis URL configured:', !!process.env.REDIS_URL);
