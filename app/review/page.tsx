@@ -179,7 +179,7 @@ function ReviewContent() {
           {!showAnswer ? (
             <button
               onClick={() => setShowAnswer(true)}
-              className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
+              className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg cursor-pointer"
             >
               Mostrar Respuesta
             </button>
@@ -191,28 +191,28 @@ function ReviewContent() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <button
                   onClick={() => handleReview('again')}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
                 >
                   <div className="text-sm">Otra vez</div>
                   <div className="text-xs opacity-90">{intervalPreviews.again}</div>
                 </button>
                 <button
                   onClick={() => handleReview('hard')}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
                 >
                   <div className="text-sm">Difícil</div>
                   <div className="text-xs opacity-90">{intervalPreviews.hard}</div>
                 </button>
                 <button
                   onClick={() => handleReview('good')}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
                 >
                   <div className="text-sm">Bien</div>
                   <div className="text-xs opacity-90">{intervalPreviews.good}</div>
                 </button>
                 <button
                   onClick={() => handleReview('easy')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
                 >
                   <div className="text-sm">Fácil</div>
                   <div className="text-xs opacity-90">{intervalPreviews.easy}</div>

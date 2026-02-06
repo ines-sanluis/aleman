@@ -148,7 +148,7 @@ export default function Home() {
               <button
                 key={limit}
                 onClick={() => setReviewLimit(limit)}
-                className={`px-3 py-2 rounded-lg font-semibold text-sm transition-colors ${
+                className={`px-3 py-2 rounded-lg font-semibold text-sm transition-colors cursor-pointer ${
                   reviewLimit === limit
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -165,7 +165,7 @@ export default function Home() {
 
         <button
           onClick={handleStartReview}
-          className="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
         >
           Iniciar Sesión de Repaso ({Math.min(reviewLimit, dueCards.length)} tarjetas)
         </button>
